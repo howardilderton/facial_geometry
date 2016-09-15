@@ -1,57 +1,754 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Facial Geometry by howardilderton</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Facial Geometry</h1>
-      <h2 class="project-tagline">Capstone Project - Facial Geometry</h2>
-      <a href="https://github.com/howardilderton/facial_geometry" class="btn">View on GitHub</a>
-      <a href="https://github.com/howardilderton/facial_geometry/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/howardilderton/facial_geometry/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<!DOCTYPE HTML>
+<!--
+	Overflow by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Facial Geometry - A datascience project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body>
+	
+		<!-- Header -->	
+			<section id="header">
+				<header>				
+					<span class="image"><img src="images/FrontView2.png"></span>				
+					<h1>Facial Geometry - A datascience project</h1>
+					<p>By Howard Ilderton</p>
+				</header>
+				<footer>
+					<a href="#banner" class="button style2 scrolly-middle">TO THE SCIENCE!</a>
+				</footer>
+			</section>
 
-    <section class="main-content">
-      <h1>
-<a id="facial-geometry" class="anchor" href="#facial-geometry" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Facial Geometry</h1>
+		<!-- Banner -->
+			<section id="banner">
+				<header>
+					<h2>Introduction</h2>
+				</header>
+				<p>This is fun datascience project about detecting faces in images and calculating facial geometry.<br />
+				We then use these geometric features to solve several classification problems:<br />
+				1. Facial recognition<br />
+				2. Gender classification<br />
+				3. Attractiveness classification</p>
+			</section>
+			
+		<!-- Facial Geometry -->	
+			<article class="container box style3">
+				<header>
+					<h2>What is facial geometry</h2>
+				</header>
+				<section>
+					<p>For this project we are specifically interested in the ratios of distances between different landmarks on a face. We therefore don't care about eye color, skin color,
+					hairstyle, and any other features that we humans can see in the image.
+					<br />
+					<br />
+					But what exactly do I mean by "ratios of distances between different landmarks"?
+					<br />
+					<br />
+					</p>
+				</section>
+			</article>			
+					
+		<!-- Facial Ratios -->
+			<article id="first" class="container box style1 right">
+				<span class="image fit"><img src="images/ratios.png"></span>
+				<div class="inner">
+					<header>
+						<h2>Facial Ratios</h2>
+					</header>
+					<p>To calculate a facial ratio we need the distances between two pairs of points.<br />
+					For example <font color="red">(A to B) : (C to D)</font><br />
+					<br />
+					<img src="https://latex.codecogs.com/gif.latex?\\&space;points&space;(x_{n},&space;y_{n})&space;\\&space;\\&space;distance1&space;=&space;\sqrt{(x_{1}-x_{2})
+					^2&space;&plus;&space;(y_{1}-y_{2})^2}&space;\\&space;\\&space;distance2&space;=&space;\sqrt{(x_{3}-x_{4})^2&space;&plus;&space;(y_{3}-y_{4})^2}&space;\\&space;
+					\\&space;ratio&space;=&space;\frac{distance1}{distance2}" title="\\ points (x_{n}, y_{n}) \\ \\ distance1 = \sqrt{(x_{1}-x_{2})^2 + (y_{1}-y_{2})^2} \\ \\ distance2
+					= \sqrt{(x_{3}-x_{4})^2 + (y_{3}-y_{4})^2} \\ \\ ratio = \frac{distance1}{distance2}" /><br />
+					</p>
+				</div>
+			</article>
+						
+		<!-- Approach -->	
+			<article class="container box style3">
+				<header>
+					<h2>Approach</h2>
+				</header>
+				<section>
+					<p>In order to build up our dataset of ratios there are several steps we'll need to follow:
+					<br />
+					</p>
+					<ol class="default">
+						<li>Identify <strong>faces</strong> within images</li>
+						<li>Identify <strong>landmarks</strong> within faces</li>
+						<li>Calculate <strong>distances</strong> and <strong>ratios</strong> between key landmarks</li>				
+					</ol>
+				</section>
+			</article>	
 
-<p>Introduction...</p>
+		<!-- Identify Faces -->
+			<article id="second" class="container box style1 left">
+				<a href="#" class="image fit"><img src="images/S638MH.gif" alt="" /></a>
+				<div class="inner">
+					<header>
+						<h2>1. Identify Faces</h2>
+					</header>
+					<p>In order to identify faces in our images we will use the <a href="http://opencv.org/" target="_blank">OpenCV</a> library which
+					includes a trained <strong>Haar Cascade Classifier</strong>.
+					<br />
+					<br />
+					OpenCV includes a basic tutorial and <a href="http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html" target="_blank">sample code here</a>. 
+					</p>
+				</div>
+			</article>
+		
+		<!-- Haar Features -->	
+			<article class="container box style3">
+				<header>
+					<h2>Haar Cascade Classifier</h2>
+				</header>
+				<section>
+					<h3>What are Haar-like features</h3>
+					<p>The popular Viola-Jones face detection algorithm uses rectangular features, known as <a href="https://en.wikipedia.org/wiki/Haar-like_features" target="_blank">Haar-like features</a>, 
+					as shown in the figure below. These features are calculated as the sum-of-pixels within clear rectangles subtracted from the sum-of-pixels within shaded rectangles, and are used to find properties in an 
+					image that are similar to regions of a face, for example the eyes region is darker than the upper-cheeks (Feature B) and the nose bridge region is brighter than the eyes (Feature C). 
+					By operating at this region-level of granularity, Haar-like features are effective in finding faces irrespective of variations in facial expressions.
+					<br />
+					<br />
+					<span class="image fit"><img src="images/haar.png"></span>
+					<br />
+					<h3>What is a cascade classifier</h3>
+					The <a href="https://en.wikipedia.org/wiki/Viola%E2%80%93Jones_object_detection_framework" target="_blank">Viola–Jones object detection framework</a>
+					uses a learning algorithm to select the best face features and trains classifiers that use them. The matching algorithm moves a sliding window over an image using Haar-like features 
+					to detect possible matches. Haar-like features are weak classifiers that are very inaccurate in isolation, so Viola-Jones uses a linear combination of weighted weak classifiers, 
+					known as a boosted classifier, which balances performance and accuracy by allowing the algorithm to reject non-face images quickly while detecting faces with high probability. 
+					As shown in the diagram below, at each stage of the cascade the image in the current window is tested against a small number of features: those that fail are rejected and those that pass 
+					progress to the next stage. The classifier trained by Viola and Jones uses a 38-stage cascade of gradually increasing complexity. The first classifier is a simple attentional operator that uses 
+					two features to achieve a false negative rate of approximately 0% and a false positive rate of 40%, roughly halving the number of times the entire cascade is evaluated.
+					<br />
+					<br />
+					<span class="image fit"><img src="images/cascade.png"></span>
+				</section>
+			</article>		
+		
+						
+		<!-- Testing Face Identification -->	
+			<article class="container box style3">
+				<header>
+					<h2>Testing our face identifier</h2>
+				</header>
+				<section>
+					<span class="image fit"><img src="images/plot_faces.jpg"></span>
+					<hr />
+					<p align="center">Great - looks like it's working! Let's try a few more</p>
+					<span class="image fit"><img src="images/plot_faces2.jpg"></span>
+				</section>
+			</article>				
 
-<h3>
-<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h3>
+		<!-- Landmarks -->
+			<article id="first" class="container box style1 right">
+				<span class="image fit"><img src="images/landmarks.png"></span>
+				<div class="inner">
+					<header>
+						<h2>2. Landmarks</h2>
+					</header>
+					<p>Now that we can identify faces within images we can use the <a href="http://dlib.net/" target="_blank">dlib</a> library to
+					locate and plot 68 facial landmarks for each face found.<br />
+					<br />
+					Dlib includes <a href="http://dlib.net/face_landmark_detection.py.html" target="_blank">sample code here</a>.
+					<br />
+					</p>
+				</div>
+			</article>
 
-<p>xxx</p>
+		<!-- Testing Landmarks -->	
+			<article class="container box style3">
+				<header>
+					<h2>Testing our landmark locator</h2>
+				</header>
+				<section>
+					<span class="image fit"><img src="images/landmarks_test3.jpg"></span>
+					<hr />
+					<p align="center">We can extract the landmarks as an array of <font color="red">x, y</font> coordinates for each face.</p>
+					<span class="image fit"><img src="images/landmarks_test4.jpg"></span>
+				</section>
+			</article>				
 
-<h3>
-<a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h3>
+		<!-- Distances and Ratios -->	
+			<article class="container box style3">
+				<header>
+					<h2>3. Distances and Ratios</h2>
+				</header>
+				<section>
+					<p>Now that we can extract the landmark coordinates we can calculate the distances between selected points.
+					<br />
+					<br />
+					Unfortunately the distances aren't very useful as they will vary simply due to different image sizes. However the
+					ratios between the distances will not change for a specific face regardless of the image size (providing the 
+					aspect ratio of the image is consistent). 
+					<br />
+					The ratios are therefore what we want to calculate.
+					<br />
+					<br />
+					Given we have 68 landmarks and we need 2 landmarks to return a distance. We can use the binomial coefficient formula to calculate
+					the number of distances available from all 68 points:
+					</p>
+					<p style="text-align:center;"><img src="https://latex.codecogs.com/gif.latex?\binom{n}{k}=\frac{n!}{k!(n-k)!}&space;\\&space;\\&space;n&space;=&space;total&space;\:&space;points&space;\\&space;k&space;=&space;points&space;\:&space;selected" 
+					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected"></p>
+					<p>Substituting n=68 and k=2 we will have 2,278 distances.
+					<br />
+					<br />
+					We need 2 distances for 1 ratio so using the binomial coefficient formula again with n=2,278 and k=2 we can calculate 2,593,503 ratios! 
+					<br />
+					<br />
+					We could use all of these ratios as our features but it's unlikely we will get that much additional info from all of them. Instead
+					we will select 21 of the 68 landmarks. This will give us 210 distances and 21,945 ratios to use as features in our models.
+					<br />
+						<p style="text-align:center;"><img src="images/selected_points.png"></p>
+					</p>
+				</section>
+			</article>	
 
-<p>xxx</p>
+		<!-- Problem 1 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Problem 1: Facial Recognition</h2>
+				</header>
+				<section>
+					<p>For our first 2 classification models I scraped approximately 60-100 images (total 1,938) of 25 different celebrities. 
+					<br />
+					Other than removing images showing multiple people I did not filter or adjust any images. We therefore have images with faces that are not frontally aligned and we would expect these to perform poorly
+					in our models given no adjustments to the ratio calculations.
+					<p style="text-align:center;"><img src="images/photo-collage.png"></p>
+					<br />
+					For each of these images we identify the face, extract the landmarks and then calculate all possible ratios based on the 21 points selected.
+					<br />
+					<br />
+					<p style="text-align:center;"><img src="images/features.jpg"></p>
+					<br />
+					As expected we have an array of 1,938 rows (1 for each image) and 21,945 columns (all possible ratios for 21 landmarks)
+					<br />
+					<br />
+					Our next step is to use Principle Component Analysis to reduce our features down to those with the highest variance.
+					<br />
+					<br />
+					<p style="text-align:center;"><img src="images/PCA.jpg"></p>
+					<br />
+					150 of the 21,945 features gives us 99.98% of the variance - and from the graph you can see that using as few as 50 features will give you
+					over 98%.
+					<br />
+					Next we split our data into 80% for training and 20% for testing and run it through several classification models
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Logistic Regression</td>
+									<td>0.86</td>
+									<td>0.84</td>
+									<td>0.84</td>
+									<td>388</td>
+								</tr>
+								<tr>
+									<td>Support Vector</td>
+									<td>0.80</td>
+									<td>0.79</td>
+									<td>0.79</td>
+									<td>388</td>
+								</tr>
+								<tr>
+									<td>Naive Bayes</td>
+									<td>0.67</td>
+									<td>0.58</td>
+									<td>0.59</td>
+									<td>388</td>
+								</tr>
+								<tr>
+									<td>Nearest Neighbors</td>
+									<td>0.55</td>
+									<td>0.52</td>
+									<td>0.51</td>
+									<td>388</td>
+								</tr>
+								<tr>
+									<td>Decision Tree</td>
+									<td>0.40</td>
+									<td>0.39</td>
+									<td>0.39</td>
+									<td>388</td>
+								</tr>
+								<tr>
+									<td>Random Forest</td>
+									<td>0.56</td>
+									<td>0.50</td>
+									<td>0.51</td>
+									<td>388</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</article>			
+			
+		<!-- Problem 2 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Problem 2: Gender Classification</h2>
+				</header>
+				<section>
+					<p>Using the same dataset as problem 1 we have 992 male images and 946 female images. 
+					<br />				
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Logistic Regression</td>
+									<td>0.97</td>
+									<td>0.97</td>
+									<td>0.97</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Support Vector</td>
+									<td>0.96</td>
+									<td>0.96</td>
+									<td>0.96</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Naive Bayes</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Nearest Neighbors</td>
+									<td>0.95</td>
+									<td>0.94</td>
+									<td>0.94</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Decision Tree</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Random Forest</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</article>			
 
-<h3>
-<a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conclusion</h3>
+		<!-- Problem 3 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Problem 3: Attractiveness Classification</h2>
+				</header>
+				<section>
+					<p>For our final classification problem we are using the <a href="http://www.hcii-lab.net/data/SCUT-FBP/EN/introduce.html" target="_blank">SCUT-FBP</a> dataset.
+					<br />
+					<br />
+					A novel face dataset with attractiveness ratings, namely the SCUT-FBP dataset(A dataset for facial beauty perception), is developed for automatic facial beauty perception in this work. 
+					The dataset provides a benchmark to evaluate the performance of different methods for facial attractiveness prediction. The SCUT-FBP dataset contains 500 different Asian female subjects with attractiveness ratings, 
+					all of which have been verified in terms of rating distribution, standard deviation, consistency, and self-consistency.
+					<p style="text-align:center;"><img src="images/SCUT.jpg"></p>
+					<p>Using the same dataset as problem 1 we have 992 male images and 946 female images. 
+					<br />				
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Logistic Regression</td>
+									<td>0.97</td>
+									<td>0.97</td>
+									<td>0.97</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Support Vector</td>
+									<td>0.96</td>
+									<td>0.96</td>
+									<td>0.96</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Naive Bayes</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Nearest Neighbors</td>
+									<td>0.95</td>
+									<td>0.94</td>
+									<td>0.94</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Decision Tree</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+								<tr>
+									<td>Random Forest</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>0.90</td>
+									<td>416</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</article>	
+			
+			<!-- Feature 2 -->
+			<article id="second" class="container box style1 left">
+				<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+				<div class="inner">
+					<header>
+						<h2>Mollis posuere<br />
+						lectus lacus</h2>
+					</header>
+					<p>Rhoncus mattis egestas sed fusce sodales rutrum et etiam ullamcorper. Etiam egestas scelerisque ac duis magna lorem ipsum dolor.</p>
+				</div>
+			</article>
 
-<p>xxx</p>
+		<!-- Feature 3 -->
+			<section>
+				<header>
+					<h2>Introduction</h2>
+				</header>
+				<article id="third" class="container box style1 right">
+					<a href="#" class="image fit"><img src="http://i.makeagif.com/media/6-14-2015/S638MH.gif" alt="" /></a></p>
+					<div class="inner">
+						<header>
+							<h2>Finding Faces</h2>
+						</header>
+						<p>First we need to locate faces in an image. We do this using a trained Haar Cascade model.</p>
+						<footer>
+							<a href="#fourth" class="button style1 scrolly">Next</a>
+						</footer>
+					</div>					
+				</article>
+				<div class="row 50%">
+					<footer>
+						<p style="text-align:center;"><a href="#first" class="button style2 scrolly-middle">BLAH</a></p>
+					</footer>
+				</div>
+			</section>
+				
+		<!-- Feature 4 -->
+			<article id="fourth" class="container box style1 left">
+				<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
+				<div class="inner">
+					<header>
+						<h2>Mollis posuere<br />
+						lectus lacus</h2>
+					</header>
+					<p>Rhoncus mattis egestas sed fusce sodales rutrum et etiam ullamcorper. Etiam egestas scelerisque ac duis magna lorem ipsum dolor.</p>
+				</div>
+			</article>
+			
+			
+		<!-- Portfolio -->
+			<article class="container box style2">
+				<header>
+					<h2>Magnis parturient</h2>
+					<p>Justo phasellus et aenean dignissim<br />
+					placerat cubilia purus lectus.</p>
+				</header>
+				<div class="inner gallery">
+					<div class="row 0%">
+						<div class="3u 12u(mobile)"><a href="images/fulls/01.jpg" class="image fit"><img src="images/thumbs/01.jpg" alt="" title="Ad infinitum" /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/02.jpg" class="image fit"><img src="images/thumbs/02.jpg" alt="" title="Dressed in Clarity" /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/03.jpg" class="image fit"><img src="images/thumbs/03.jpg" alt="" title="Raven" /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/04.jpg" class="image fit"><img src="images/thumbs/04.jpg" alt="" title="I'll have a cup of Disneyland, please" /></a></div>
+					</div>
+					<div class="row 0%">
+						<div class="3u 12u(mobile)"><a href="images/fulls/05.jpg" class="image fit"><img src="images/thumbs/05.jpg" alt="" title="Cherish" /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/06.jpg" class="image fit"><img src="images/thumbs/06.jpg" alt="" title="Different." /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/07.jpg" class="image fit"><img src="images/thumbs/07.jpg" alt="" title="History was made here" /></a></div>
+						<div class="3u 12u(mobile)"><a href="images/fulls/08.jpg" class="image fit"><img src="images/thumbs/08.jpg" alt="" title="People come and go and walk away" /></a></div>
+					</div>
+				</div>
+				<footer>
+					<a href="#fourth" class="button style1 scrolly">Next</a>
+				</footer>
+			</article>
 
-<h3>
-<a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
+		<!-- Contact -->
+			<article class="container box style3">
+				<header>
+					<h2>Nisl sed ultricies</h2>
+					<p>Diam dignissim lectus eu ornare volutpat orci.</p>
+				</header>
+				<form method="post" action="#">
+					<div class="row 50%">
+						<div class="6u 12u$(mobile)"><input type="text" class="text" name="name" placeholder="Name" /></div>
+						<div class="6u$ 12u$(mobile)"><input type="text" class="text" name="email" placeholder="Email" /></div>
+						<div class="12u$">
+							<textarea name="message" placeholder="Message"></textarea>
+						</div>
+						<div class="12u$">
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+			</article>
 
-<p>xxx</p>
+		<!-- Generic -->
+		
+			<article class="container box style3">
+				<header>
+					<h2>Generic Box</h2>
+					<p>Just a generic box. Nothing to see here.</p>
+				</header>
+				<section>
+					<header>
+						<h3>Paragraph</h3>
+						<p>This is a subtitle</p>
+					</header>
+					<p>Phasellus nisl nisl, varius id <sup>porttitor sed pellentesque</sup> ac orci. Pellentesque
+					habitant <strong>strong</strong> tristique <b>bold</b> et netus <i>italic</i> malesuada <em>emphasized</em> ac turpis egestas. Morbi
+					leo suscipit ut. Praesent <sub>id turpis vitae</sub> turpis pretium ultricies. Vestibulum sit
+					amet risus elit.</p>
+				</section>
+				<section>
+					<header>
+						<h3>Blockquote</h3>
+					</header>
+					<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget.
+					tempus euismod. Vestibulum ante ipsum primis in faucibus.</blockquote>
+				</section>
+				<section>
+					<header>
+						<h3>Divider</h3>
+					</header>
+					<p>Donec consectetur <a href="#">vestibulum dolor et pulvinar</a>. Etiam vel felis enim, at viverra
+					ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
+					facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
+					tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+					posuere cubilia.</p>
+					<hr />
+					<p>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra
+					ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
+					facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
+					tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+					posuere cubilia.</p>
+				</section>
+				<section>
+					<header>
+						<h3>Unordered List</h3>
+					</header>
+					<ul class="default">
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+					</ul>
+				</section>
+				<section>
+					<header>
+						<h3>Ordered List</h3>
+					</header>
+					<ol class="default">
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
+					</ol>
+				</section>
+				<section>
+					<header>
+						<h3>Table</h3>
+					</header>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>45815</td>
+									<td>Something</td>
+									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>24524</td>
+									<td>Nothing</td>
+									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
+									<td>19.99</td>
+								</tr>
+								<tr>
+									<td>45815</td>
+									<td>Something</td>
+									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
+									<td>29.99</td>
+								</tr>
+								<tr>
+									<td>24524</td>
+									<td>Nothing</td>
+									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
+									<td>19.99</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3"></td>
+									<td>100.00</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</section>
+				<section>
+					<header>
+						<h3>Form</h3>
+					</header>
+					<form method="post" action="#">
+						<div class="row">
+							<div class="6u">
+								<input class="text" type="text" name="name" id="name" value="" placeholder="John Doe" />
+							</div>
+							<div class="6u">
+								<input class="text" type="text" name="email" id="email" value="" placeholder="johndoe@domain.tld" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="12u">
+								<select name="department" id="department">
+									<option value="">Choose a department</option>
+									<option value="1">Manufacturing</option>
+									<option value="2">Administration</option>
+									<option value="3">Support</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="12u">
+								<input class="text" type="text" name="subject" id="subject" value="" placeholder="Enter your subject" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="12u">
+								<textarea name="message" id="message" placeholder="Enter your message"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="12u">
+								<ul class="actions">
+									<li><input type="submit" value="Submit" /></li>
+									<li><input type="reset" class="style3" value="Clear Form" /></li>
+								</ul>
+							</div>
+						</div>
+					</form>
+				</section>
+			</article>
+		-->
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/howardilderton/facial_geometry">Facial Geometry</a> is maintained by <a href="https://github.com/howardilderton">howardilderton</a>.</span>
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</div>
+		</section>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+		
+			<script type="text/javascript">
+			// create the back to top button
+			$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
 
-    </section>
+			var amountScrolled = 300;
 
-  
-  </body>
+			$(window).scroll(function() {
+				if ( $(window).scrollTop() > amountScrolled ) {
+					$('a.back-to-top').fadeIn('slow');
+				} else {
+					$('a.back-to-top').fadeOut('slow');
+				}
+			});
+
+			$('a.back-to-top, a.simple-back-to-top').click(function() {
+				$('html, body').animate({
+					scrollTop: 0
+				}, 700);
+				return false;
+			});
+			</script>
+				
+	</body>
 </html>
