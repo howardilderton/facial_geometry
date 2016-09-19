@@ -2002,9 +2002,9 @@
 		position: relative;
 		color: #fff;
 		text-shadow: 0 0 0.5px rgba(255, 255, 255, 0.25);
-		text-align: center;
+		text-align: left;
 		background: #35b88f url("images/banner.svg") bottom center no-repeat;
-		padding: 5em 0 5em 0;
+		padding: 5em 23em 5em 23em;
 		margin: 0;
 		background-size: 125% auto;
 	}
@@ -2015,6 +2015,7 @@
 		}
 
 		#banner header {
+			text-align: center;
 			margin: 0 0 2em 0;
 		}
 
@@ -2492,7 +2493,7 @@
 		/* Banner */
 
 			#banner {
-				padding: 3em 2em 3em 2em;
+				padding: 3em 20em 3em 20em;
 				background-size: auto 150%;
 			}
 
@@ -2543,11 +2544,30 @@
 			right: 20px;
 			bottom: 20px;
 			
-			background: #27AE61 url("up-arrow.png") no-repeat center 43%;
+			background: #27AE61 url("images/up-arrow.png") no-repeat center 43%;
 			-webkit-border-radius: 30px;
 			-moz-border-radius: 30px;
 			border-radius: 30px;
 			}
 			a:hover.back-to-top {
+				background-color: #000;
+			}
+		/*	
+			b.scroll-down {
+			display: none;
+			width: 60px;
+			height: 60px;
+			text-indent: -9999px;
+			position: fixed;
+			z-index: 999;
+			left: 20px;
+			bottom: 20px;
+			
+			background: #27AE61 url("images/down-arrow.png") no-repeat center 43%;
+			-webkit-border-radius: 30px;
+			-moz-border-radius: 30px;
+			border-radius: 30px;
+			}
+			b:hover.scroll-down {
 				background-color: #000;
 			}

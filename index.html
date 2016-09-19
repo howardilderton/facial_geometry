@@ -33,10 +33,15 @@
 					<h2>Introduction</h2>
 				</header>
 				<p>This is fun datascience project about detecting faces in images and calculating facial geometry.<br />
-				We then use these geometric features to solve several classification problems:<br />
+				We then use these geometric features to solve several classification problems:
+				</p><br />
+				<p>
 				1. Facial recognition<br />
 				2. Gender classification<br />
-				3. Attractiveness classification</p>
+				3. Race classification<br />
+				4. Age regression<br />
+				5. Attractiveness regression
+				</p><br />
 			</section>
 			
 		<!-- Facial Geometry -->	
@@ -86,7 +91,8 @@
 					<ol class="default">
 						<li>Identify <strong>faces</strong> within images</li>
 						<li>Identify <strong>landmarks</strong> within faces</li>
-						<li>Calculate <strong>distances</strong> and <strong>ratios</strong> between key landmarks</li>				
+						<li>Calculate <strong>distances</strong> and <strong>ratios</strong> between key landmarks</li>
+						<li>Reduce large number of dimensions via <strong>Principle Component Analysis</strong></li>	
 					</ol>
 				</section>
 			</article>	
@@ -143,10 +149,10 @@
 					<h2>Testing our face identifier</h2>
 				</header>
 				<section>
-					<span class="image fit"><img src="images/plot_faces.jpg"></span>
+					<span class="image fit"><img src="images/plot_faces.png"></span>
 					<hr />
 					<p align="center">Great - looks like it's working! Let's try a few more</p>
-					<span class="image fit"><img src="images/plot_faces2.jpg"></span>
+					<span class="image fit"><img src="images/plot_faces2.png"></span>
 				</section>
 			</article>				
 
@@ -158,10 +164,12 @@
 						<h2>2. Landmarks</h2>
 					</header>
 					<p>Now that we can identify faces within images we can use the <a href="http://dlib.net/" target="_blank">dlib</a> library to
-					locate and plot 68 facial landmarks for each face found.<br />
+					locate and plot 68 facial landmarks. These are
+					points on the face such as the corners of the mouth, along the eyebrows, on
+					the eyes, and so forth.
+					<br />
 					<br />
 					Dlib includes <a href="http://dlib.net/face_landmark_detection.py.html" target="_blank">sample code here</a>.
-					<br />
 					</p>
 				</div>
 			</article>
@@ -172,10 +180,10 @@
 					<h2>Testing our landmark locator</h2>
 				</header>
 				<section>
-					<span class="image fit"><img src="images/landmarks_test3.jpg"></span>
+					<span class="image fit"><img src="images/landmarks_test3.png"></span>
 					<hr />
 					<p align="center">We can extract the landmarks as an array of <font color="red">x, y</font> coordinates for each face.</p>
-					<span class="image fit"><img src="images/landmarks_test4.jpg"></span>
+					<span class="image fit"><img src="images/landmarks_test4.png"></span>
 				</section>
 			</article>				
 
@@ -198,7 +206,8 @@
 					Given we have 68 landmarks and we need 2 landmarks to return a distance. We can use the binomial coefficient formula to calculate
 					the number of distances available from all 68 points:
 					</p>
-					<p style="text-align:center;"><img src="https://latex.codecogs.com/gif.latex?\binom{n}{k}=\frac{n!}{k!(n-k)!}&space;\\&space;\\&space;n&space;=&space;total&space;\:&space;points&space;\\&space;k&space;=&space;points&space;\:&space;selected" 
+					<p style="text-align:center;">
+					<img src="https://latex.codecogs.com/gif.latex?\binom{n}{k}=\frac{n!}{k!(n-k)!}&space;\\&space;\\&space;n&space;=&space;total&space;\:&space;points&space;\\&space;k&space;=&space;points&space;\:&space;selected" 
 					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected"></p>
 					<p>Substituting n=68 and k=2 we will have 2,278 distances.
 					<br />
@@ -214,36 +223,58 @@
 				</section>
 			</article>	
 
+		<!-- PCA -->	
+			<article class="container box style3">
+				<header>
+					<h2>4. Principle Component Analysis</h2>
+				</header>
+				<section>
+					<p>From the previous section we now have 21,945 ratios as our features. One of the issues with a large number of features is the
+					<a href="https://en.wikipedia.org/wiki/Curse_of_dimensionality" target="_blank">curse of dimensionality</a>. In order to reduce the number of dimensions we can use 
+					<a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">Principle Component Analysis (PCA)</a>.
+					</p>
+					<p>PCA involves an <a href=https://en.wikipedia.org/wiki/Orthogonal_transformation target="_blank">orthogonal transformation</a> of your dimensions to emphasize variance. The goal of PCA 
+					is to reduce the number of dimensions used for modelling to a suitable number that covers the majority of the variance in the data. 
+					This is easily understood with some excellent visuals from <a href=http://setosa.io/ev/principal-component-analysis/ target="_blank">this site</a>.
+					</p>
+					
+					<p>In the below 2d example we have 5 data points and 2 features (x & y). Each datapoint has both an x value and a y value which we would use in our models.
+					Using PCA we can create a transform the axis into pc1 and pc2.
+					</p>
+					<p style="text-align:center;"><img src="images/pca_2d.png"></p>
+					<p>We haven't changed anything about the data. Both pc1 and pc2 axis are a linear combination of x & y. But as you can see from the below pc1 now gives as a lot of of information about the points
+					whilst pc2 gives very little and can be ignored. We have therefore reduced our dimensions from 2 to 1 and can use only pc1 in our model.
+					</p>
+					<p style="text-align:center;"><img src="images/pca_2d_footer.png"></p>
+					<p>Below is a similar example using 3 dimensions.
+					</p>
+					<p style="text-align:center;"><img src="images/pca_3d.gif"></p>
+					<p>Using PCA we can reduce our 21,945 features 
+					to 150 which gives us 99.98% of the variance - and from the graph you can see that using as few as 50 features will give you over 98% of the variance.
+					</p>
+					<p style="text-align:center;"><img src="images/pca.png"></p>
+				</section>
+			</article>	
+			
+			
 		<!-- Problem 1 -->	
 			<article class="container box style3">
 				<header>
 					<h2>Problem 1: Facial Recognition</h2>
 				</header>
 				<section>
-					<p>For our first 2 classification models I scraped approximately 60-100 images (total 1,938) of 25 different celebrities. 
-					<br />
+					<p>For our first 2 classification models I scraped approximately 60-100 images (total 1,938) of 25 different celebrities.
+					</p>
+					<p>
 					Other than removing images showing multiple people I did not filter or adjust any images. We therefore have images with faces that are not frontally aligned and we would expect these to perform poorly
 					in our models given no adjustments to the ratio calculations.
-					<p style="text-align:center;"><img src="images/photo-collage.png"></p>
-					<br />
-					For each of these images we identify the face, extract the landmarks and then calculate all possible ratios based on the 21 points selected.
-					<br />
-					<br />
-					<p style="text-align:center;"><img src="images/features.jpg"></p>
-					<br />
-					As expected we have an array of 1,938 rows (1 for each image) and 21,945 columns (all possible ratios for 21 landmarks)
-					<br />
-					<br />
-					Our next step is to use Principle Component Analysis to reduce our features down to those with the highest variance.
-					<br />
-					<br />
-					<p style="text-align:center;"><img src="images/PCA.jpg"></p>
-					<br />
-					150 of the 21,945 features gives us 99.98% of the variance - and from the graph you can see that using as few as 50 features will give you
-					over 98%.
-					<br />
-					Next we split our data into 80% for training and 20% for testing and run it through several classification models
 					</p>
+					<p style="text-align:center;"><img src="images/photo-collage.png"></p>
+					<p>
+					Next we split our data into 80% for training and 20% for testing and fit the training data to 6 classification models.
+					We then use these models to predict the celebrities in our test data. The results are summarized below:
+					</p>
+									
 					<div class="table-wrapper">
 						<table class="default">
 							<thead>
@@ -258,45 +289,269 @@
 							<tbody>
 								<tr>
 									<td>Logistic Regression</td>
-									<td>0.86</td>
-									<td>0.84</td>
-									<td>0.84</td>
+									<td>0.88</td>
+									<td>0.88</td>
+									<td>0.87</td>
 									<td>388</td>
 								</tr>
 								<tr>
 									<td>Support Vector</td>
-									<td>0.80</td>
-									<td>0.79</td>
-									<td>0.79</td>
+									<td>0.83</td>
+									<td>0.82</td>
+									<td>0.82</td>
 									<td>388</td>
 								</tr>
 								<tr>
 									<td>Naive Bayes</td>
-									<td>0.67</td>
-									<td>0.58</td>
-									<td>0.59</td>
+									<td>0.69</td>
+									<td>0.61</td>
+									<td>0.61</td>
 									<td>388</td>
 								</tr>
 								<tr>
 									<td>Nearest Neighbors</td>
-									<td>0.55</td>
-									<td>0.52</td>
 									<td>0.51</td>
+									<td>0.49</td>
+									<td>0.48</td>
 									<td>388</td>
 								</tr>
 								<tr>
 									<td>Decision Tree</td>
-									<td>0.40</td>
+									<td>0.41</td>
 									<td>0.39</td>
 									<td>0.39</td>
 									<td>388</td>
 								</tr>
 								<tr>
 									<td>Random Forest</td>
-									<td>0.56</td>
-									<td>0.50</td>
-									<td>0.51</td>
+									<td>0.48</td>
+									<td>0.46</td>
+									<td>0.46</td>
 									<td>388</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr />
+					<p>Using gridsearch to test different model parameters we are able to improve the Support Vector results:
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Support Vector</td>
+									<td>0.88</td>
+									<td>0.88</td>
+									<td>0.88</td>
+									<td>388</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr />
+					<p>And here is our classification report:
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Angelina Jolie</td>
+									<td>0.89</td>
+									<td>0.77</td>
+									<td>0.83</td>
+									<td>22</td>
+								</tr>
+								<tr>
+									<td>Brad Pitt</td>
+									<td>0.86</td>
+									<td>0.83</td>
+									<td>0.84</td>
+									<td>23</td>
+								</tr>
+								<tr>
+									<td>George Clooney</td>
+									<td>0.89</td>
+									<td>0.84</td>
+									<td>0.86</td>
+									<td>19</td>
+								</tr>
+								<tr>
+									<td>Jennifer Lawrence</td>
+									<td>0.88</td>
+									<td>0.93</td>
+									<td>0.90</td>
+									<td>15</td>
+								</tr>
+								<tr>
+									<td>Jessica Alba</td>
+									<td>0.94</td>
+									<td>0.89</td>
+									<td>0.91</td>
+									<td>18</td>
+								</tr>
+								<tr>
+									<td>John Travolta</td>
+									<td>0.87</td>
+									<td>0.93</td>
+									<td>0.90</td>
+									<td>14</td>
+								</tr>
+								<tr>
+									<td>Lucy Liu</td>
+									<td>0.80</td>
+									<td>1.00</td>
+									<td>0.89</td>
+									<td>12</td>
+								</tr>
+								<tr>
+									<td>Margot Robbie</td>
+									<td>0.64</td>
+									<td>0.78</td>
+									<td>0.70</td>
+									<td>9</td>
+								</tr>
+								<tr>
+									<td>Ryan Reynolds</td>
+									<td>0.86</td>
+									<td>0.67</td>
+									<td>0.75</td>
+									<td>18</td>
+								</tr>
+								<tr>
+									<td>Scarlett Johansson</td>
+									<td>0.81</td>
+									<td>0.81</td>
+									<td>0.81</td>
+									<td>16</td>
+								</tr>
+								<tr>
+									<td>Anthony Hopkins</td>
+									<td>0.90</td>
+									<td>0.69</td>
+									<td>0.78</td>
+									<td>13</td>
+								</tr>
+								<tr>
+									<td>Cameron Diaz</td>
+									<td>1.00</td>
+									<td>1.00</td>
+									<td>1.00</td>
+									<td>17</td>
+								</tr>
+								<tr>
+									<td>Denzel Washington</td>
+									<td>1.00</td>
+									<td>0.96</td>
+									<td>0.98</td>
+									<td>25</td>
+								</tr>
+								<tr>
+									<td>Emma Stone</td>
+									<td>1.00</td>
+									<td>0.93</td>
+									<td>0.96</td>
+									<td>14</td>
+								</tr>
+								<tr>
+									<td>Emma Watson</td>
+									<td>0.79</td>
+									<td>0.85</td>
+									<td>0.81</td>
+									<td>13</td>
+								</tr>
+								<tr>
+									<td>Keanu Reeves</td>
+									<td>0.81</td>
+									<td>1.00</td>
+									<td>0.90</td>
+									<td>13</td>
+								</tr>
+								<tr>
+									<td>Kevin Spacey</td>
+									<td>0.95</td>
+									<td>0.95</td>
+									<td>0.95</td>
+									<td>20</td>
+								</tr>
+								<tr>
+									<td>Kristen Stewart</td>
+									<td>0.91</td>
+									<td>0.91</td>
+									<td>0.91</td>
+									<td>11</td>
+								</tr>
+								<tr>
+									<td>Leonardo Dicaprio</td>
+									<td>0.91</td>
+									<td>0.91</td>
+									<td>0.91</td>
+									<td>11</td>
+								</tr>
+								<tr>
+									<td>Matt Damon</td>
+									<td>0.86</td>
+									<td>0.75</td>
+									<td>0.8</td>
+									<td>16</td>
+								</tr>
+								<tr>
+									<td>Mila Kunis</td>
+									<td>0.80</td>
+									<td>0.92</td>
+									<td>0.86</td>
+									<td>13</td>
+								</tr>
+								<tr>
+									<td>Oprah Winfrey</td>
+									<td>0.95</td>
+									<td>1.00</td>
+									<td>0.97</td>
+									<td>19</td>
+								</tr>
+								<tr>
+									<td>Tom Cruise</td>
+									<td>0.78</td>
+									<td>0.93</td>
+									<td>0.85</td>
+									<td>15</td>
+								</tr>
+								<tr>
+									<td>Tom Hardy</td>
+									<td>0.85</td>
+									<td>0.79</td>
+									<td>0.81</td>
+									<td>14</td>
+								</tr>
+								<tr>
+									<td>Will Smith</td>
+									<td>0.89</td>
+									<td>1.00</td>
+									<td>0.94</td>
+									<td>8</td>
+								</tr>
+								<tr>
+									<td><strong>Avg/Total</strong></td>
+									<td><strong>0.88</strong></td>
+									<td><strong>0.88</strong></td>
+									<td><strong>0.88</strong></td>
+									<td><strong>388</strong></td>
 								</tr>
 							</tbody>
 						</table>
@@ -310,8 +565,17 @@
 					<h2>Problem 2: Gender Classification</h2>
 				</header>
 				<section>
-					<p>Using the same dataset as problem 1 we have 992 male images and 946 female images. 
-					<br />				
+					<p>
+					For Problem 2 we will be using the 
+					<a href=http://faculty.chicagobooth.edu/bernd.wittenbrink/cfd/index.html target="_blank">Chicago Face Database</a>
+					<span class="image"><img src="images/cfd.png"></span>
+					</p>
+					<p>
+					The Chicago Face Database was developed at the University of Chicago by Debbie S. Ma, Joshua Correll, and Bernd Wittenbrink. 
+					The CFD is intended for use in scientific research. It provides high-resolution, standardized photographs of male and female faces of varying ethnicity between the ages of 17-65. 
+					These data include both physical attributes (e.g., face size) as well as subjective ratings by independent judges (e.g., attractiveness).
+					</p>
+					<p>From this dataset we have <strong>287 male</strong> and <strong>305 female</strong> images. I used an 80% train/20% test split again.
 					</p>
 					<div class="table-wrapper">
 						<table class="default">
@@ -327,45 +591,84 @@
 							<tbody>
 								<tr>
 									<td>Logistic Regression</td>
-									<td>0.97</td>
-									<td>0.97</td>
-									<td>0.97</td>
-									<td>416</td>
+									<td>0.81</td>
+									<td>0.81</td>
+									<td>0.81</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Support Vector</td>
-									<td>0.96</td>
-									<td>0.96</td>
-									<td>0.96</td>
-									<td>416</td>
+									<td>0.79</td>
+									<td>0.79</td>
+									<td>0.79</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Naive Bayes</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.58</td>
+									<td>0.59</td>
+									<td>0.58</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Nearest Neighbors</td>
-									<td>0.95</td>
-									<td>0.94</td>
-									<td>0.94</td>
-									<td>416</td>
+									<td>0.71</td>
+									<td>0.71</td>
+									<td>0.71</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Decision Tree</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.64</td>
+									<td>0.61</td>
+									<td>0.61</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Random Forest</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.63</td>
+									<td>0.63</td>
+									<td>0.63</td>
+									<td>119</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr />
+					<p>Classification report:
+					</p>
+										<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Female</td>
+									<td>0.85</td>
+									<td>0.81</td>
+									<td>0.83</td>
+									<td>69</td>
+								</tr>
+								<tr>
+									<td>Male</td>
+									<td>0.75</td>
+									<td>0.80</td>
+									<td>0.78</td>
+									<td>50</td>
+								</tr>
+								<tr>
+									<td><strong>Avg/Total</strong></td>
+									<td><strong>0.81</strong></td>
+									<td><strong>0.81</strong></td>
+									<td><strong>0.81</strong></td>
+									<td><strong>119</strong></td>
 								</tr>
 							</tbody>
 						</table>
@@ -376,18 +679,19 @@
 		<!-- Problem 3 -->	
 			<article class="container box style3">
 				<header>
-					<h2>Problem 3: Attractiveness Classification</h2>
+					<h2>Problem 3: Race Classification</h2>
 				</header>
 				<section>
-					<p>For our final classification problem we are using the <a href="http://www.hcii-lab.net/data/SCUT-FBP/EN/introduce.html" target="_blank">SCUT-FBP</a> dataset.
-					<br />
-					<br />
-					A novel face dataset with attractiveness ratings, namely the SCUT-FBP dataset(A dataset for facial beauty perception), is developed for automatic facial beauty perception in this work. 
-					The dataset provides a benchmark to evaluate the performance of different methods for facial attractiveness prediction. The SCUT-FBP dataset contains 500 different Asian female subjects with attractiveness ratings, 
-					all of which have been verified in terms of rating distribution, standard deviation, consistency, and self-consistency.
-					<p style="text-align:center;"><img src="images/SCUT.jpg"></p>
-					<p>Using the same dataset as problem 1 we have 992 male images and 946 female images. 
-					<br />				
+					<p>
+					For Problem 3 we will be using the 
+					<a href=http://faculty.chicagobooth.edu/bernd.wittenbrink/cfd/index.html target="_blank">Chicago Face Database</a> again.
+					<span class="image"><img src="images/cfd.png"></span>
+					</p>
+					<p>The dataset includes 4 race labels:
+					<strong>Asian (109), Black (192), Latino (108), White (183) </strong>.
+					</p>
+					<p>
+					I continued using an 80% train/20% test split.
 					</p>
 					<div class="table-wrapper">
 						<table class="default">
@@ -403,304 +707,298 @@
 							<tbody>
 								<tr>
 									<td>Logistic Regression</td>
-									<td>0.97</td>
-									<td>0.97</td>
-									<td>0.97</td>
-									<td>416</td>
+									<td>0.73</td>
+									<td>0.75</td>
+									<td>0.73</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Support Vector</td>
-									<td>0.96</td>
-									<td>0.96</td>
-									<td>0.96</td>
-									<td>416</td>
+									<td>0.74</td>
+									<td>0.76</td>
+									<td>0.75</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Naive Bayes</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.63</td>
+									<td>0.59</td>
+									<td>0.59</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Nearest Neighbors</td>
-									<td>0.95</td>
-									<td>0.94</td>
-									<td>0.94</td>
-									<td>416</td>
+									<td>0.70</td>
+									<td>0.71</td>
+									<td>0.70</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Decision Tree</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.57</td>
+									<td>0.56</td>
+									<td>0.56</td>
+									<td>119</td>
 								</tr>
 								<tr>
 									<td>Random Forest</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>0.90</td>
-									<td>416</td>
+									<td>0.55</td>
+									<td>0.57</td>
+									<td>0.55</td>
+									<td>119</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-				</section>
-			</article>	
-			
-			<!-- Feature 2 -->
-			<article id="second" class="container box style1 left">
-				<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-				<div class="inner">
-					<header>
-						<h2>Mollis posuere<br />
-						lectus lacus</h2>
-					</header>
-					<p>Rhoncus mattis egestas sed fusce sodales rutrum et etiam ullamcorper. Etiam egestas scelerisque ac duis magna lorem ipsum dolor.</p>
-				</div>
-			</article>
-
-		<!-- Feature 3 -->
-			<section>
-				<header>
-					<h2>Introduction</h2>
-				</header>
-				<article id="third" class="container box style1 right">
-					<a href="#" class="image fit"><img src="http://i.makeagif.com/media/6-14-2015/S638MH.gif" alt="" /></a></p>
-					<div class="inner">
-						<header>
-							<h2>Finding Faces</h2>
-						</header>
-						<p>First we need to locate faces in an image. We do this using a trained Haar Cascade model.</p>
-						<footer>
-							<a href="#fourth" class="button style1 scrolly">Next</a>
-						</footer>
-					</div>					
-				</article>
-				<div class="row 50%">
-					<footer>
-						<p style="text-align:center;"><a href="#first" class="button style2 scrolly-middle">BLAH</a></p>
-					</footer>
-				</div>
-			</section>
-				
-		<!-- Feature 4 -->
-			<article id="fourth" class="container box style1 left">
-				<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-				<div class="inner">
-					<header>
-						<h2>Mollis posuere<br />
-						lectus lacus</h2>
-					</header>
-					<p>Rhoncus mattis egestas sed fusce sodales rutrum et etiam ullamcorper. Etiam egestas scelerisque ac duis magna lorem ipsum dolor.</p>
-				</div>
-			</article>
-			
-			
-		<!-- Portfolio -->
-			<article class="container box style2">
-				<header>
-					<h2>Magnis parturient</h2>
-					<p>Justo phasellus et aenean dignissim<br />
-					placerat cubilia purus lectus.</p>
-				</header>
-				<div class="inner gallery">
-					<div class="row 0%">
-						<div class="3u 12u(mobile)"><a href="images/fulls/01.jpg" class="image fit"><img src="images/thumbs/01.jpg" alt="" title="Ad infinitum" /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/02.jpg" class="image fit"><img src="images/thumbs/02.jpg" alt="" title="Dressed in Clarity" /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/03.jpg" class="image fit"><img src="images/thumbs/03.jpg" alt="" title="Raven" /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/04.jpg" class="image fit"><img src="images/thumbs/04.jpg" alt="" title="I'll have a cup of Disneyland, please" /></a></div>
-					</div>
-					<div class="row 0%">
-						<div class="3u 12u(mobile)"><a href="images/fulls/05.jpg" class="image fit"><img src="images/thumbs/05.jpg" alt="" title="Cherish" /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/06.jpg" class="image fit"><img src="images/thumbs/06.jpg" alt="" title="Different." /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/07.jpg" class="image fit"><img src="images/thumbs/07.jpg" alt="" title="History was made here" /></a></div>
-						<div class="3u 12u(mobile)"><a href="images/fulls/08.jpg" class="image fit"><img src="images/thumbs/08.jpg" alt="" title="People come and go and walk away" /></a></div>
-					</div>
-				</div>
-				<footer>
-					<a href="#fourth" class="button style1 scrolly">Next</a>
-				</footer>
-			</article>
-
-		<!-- Contact -->
-			<article class="container box style3">
-				<header>
-					<h2>Nisl sed ultricies</h2>
-					<p>Diam dignissim lectus eu ornare volutpat orci.</p>
-				</header>
-				<form method="post" action="#">
-					<div class="row 50%">
-						<div class="6u 12u$(mobile)"><input type="text" class="text" name="name" placeholder="Name" /></div>
-						<div class="6u$ 12u$(mobile)"><input type="text" class="text" name="email" placeholder="Email" /></div>
-						<div class="12u$">
-							<textarea name="message" placeholder="Message"></textarea>
-						</div>
-						<div class="12u$">
-							<ul class="actions">
-								<li><input type="submit" value="Send Message" /></li>
-							</ul>
-						</div>
-					</div>
-				</form>
-			</article>
-
-		<!-- Generic -->
-		
-			<article class="container box style3">
-				<header>
-					<h2>Generic Box</h2>
-					<p>Just a generic box. Nothing to see here.</p>
-				</header>
-				<section>
-					<header>
-						<h3>Paragraph</h3>
-						<p>This is a subtitle</p>
-					</header>
-					<p>Phasellus nisl nisl, varius id <sup>porttitor sed pellentesque</sup> ac orci. Pellentesque
-					habitant <strong>strong</strong> tristique <b>bold</b> et netus <i>italic</i> malesuada <em>emphasized</em> ac turpis egestas. Morbi
-					leo suscipit ut. Praesent <sub>id turpis vitae</sub> turpis pretium ultricies. Vestibulum sit
-					amet risus elit.</p>
-				</section>
-				<section>
-					<header>
-						<h3>Blockquote</h3>
-					</header>
-					<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget.
-					tempus euismod. Vestibulum ante ipsum primis in faucibus.</blockquote>
-				</section>
-				<section>
-					<header>
-						<h3>Divider</h3>
-					</header>
-					<p>Donec consectetur <a href="#">vestibulum dolor et pulvinar</a>. Etiam vel felis enim, at viverra
-					ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
-					facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
-					tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-					posuere cubilia.</p>
 					<hr />
-					<p>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra
-					ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel. Praesent nec orci
-					facilisis leo magna. Cras sit amet urna eros, id egestas urna. Quisque aliquam
-					tempus euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-					posuere cubilia.</p>
-				</section>
-				<section>
-					<header>
-						<h3>Unordered List</h3>
-					</header>
-					<ul class="default">
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-					</ul>
-				</section>
-				<section>
-					<header>
-						<h3>Ordered List</h3>
-					</header>
-					<ol class="default">
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-						<li>Donec consectetur vestibulum dolor et pulvinar. Etiam vel felis enim, at viverra ligula. Ut porttitor sagittis lorem, quis eleifend nisi ornare vel.</li>
-					</ol>
-				</section>
-				<section>
-					<header>
-						<h3>Table</h3>
-					</header>
+					<p>Using gridsearch to test different model parameters we are able to improve the Logistic Regression results:
+					</p>
 					<div class="table-wrapper">
 						<table class="default">
 							<thead>
 								<tr>
-									<th>ID</th>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Price</th>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td>45815</td>
-									<td>Something</td>
-									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>24524</td>
-									<td>Nothing</td>
-									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
-									<td>19.99</td>
-								</tr>
-								<tr>
-									<td>45815</td>
-									<td>Something</td>
-									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>24524</td>
-									<td>Nothing</td>
-									<td>Ut porttitor sagittis lorem quis nisi ornare.</td>
-									<td>19.99</td>
+									<td>Support Vector</td>
+									<td>0.81</td>
+									<td>0.82</td>
+									<td>0.82</td>
+									<td>119</td>
 								</tr>
 							</tbody>
-							<tfoot>
+						</table>
+					</div>
+					<hr />
+					<p>Classification report:
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
 								<tr>
-									<td colspan="3"></td>
-									<td>100.00</td>
+									<th>Model</th>
+									<th>Precision</th>
+									<th>Recall</th>
+									<th>F1-score</th>
+									<th>Support</th>
 								</tr>
-							</tfoot>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Asian</td>
+									<td>0.85</td>
+									<td>0.81</td>
+									<td>0.83</td>
+									<td>21</td>
+								</tr>
+								<tr>
+									<td>Black</td>
+									<td>0.92</td>
+									<td>0.97</td>
+									<td>0.94</td>
+									<td>34</td>
+								</tr>
+								<tr>
+									<td>Latino</td>
+									<td>0.63</td>
+									<td>0.50</td>
+									<td>0.56</td>
+									<td>24</td>
+								</tr>
+								<tr>
+									<td>White</td>
+									<td>0.82</td>
+									<td>0.90</td>
+									<td>0.86</td>
+									<td>40</td>
+								</tr>
+								<tr>
+									<td><strong>Avg/Total</strong></td>
+									<td><strong>0.81</strong></td>
+									<td><strong>0.82</strong></td>
+									<td><strong>0.82</strong></td>
+									<td><strong>119</strong></td>
+								</tr>
+							</tbody>
 						</table>
 					</div>
 				</section>
+			</article>
+
+		<!-- Problem 4 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Problem 4: Age Regression</h2>
+				</header>
 				<section>
-					<header>
-						<h3>Form</h3>
-					</header>
-					<form method="post" action="#">
-						<div class="row">
-							<div class="6u">
-								<input class="text" type="text" name="name" id="name" value="" placeholder="John Doe" />
-							</div>
-							<div class="6u">
-								<input class="text" type="text" name="email" id="email" value="" placeholder="johndoe@domain.tld" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="12u">
-								<select name="department" id="department">
-									<option value="">Choose a department</option>
-									<option value="1">Manufacturing</option>
-									<option value="2">Administration</option>
-									<option value="3">Support</option>
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="12u">
-								<input class="text" type="text" name="subject" id="subject" value="" placeholder="Enter your subject" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="12u">
-								<textarea name="message" id="message" placeholder="Enter your message"></textarea>
-							</div>
-						</div>
-						<div class="row">
-							<div class="12u">
-								<ul class="actions">
-									<li><input type="submit" value="Submit" /></li>
-									<li><input type="reset" class="style3" value="Clear Form" /></li>
-								</ul>
-							</div>
-						</div>
-					</form>
+					<p>
+					For Problem 4 we will continue with the 
+					<a href=http://faculty.chicagobooth.edu/bernd.wittenbrink/cfd/index.html target="_blank">Chicago Face Database</a>.
+					<span class="image"><img src="images/cfd.png"></span>
+					</p>
+					<p>The dataset includes an age estimation of the face from 26 raters with ages between 28 and 56 years old.
+					</p>
+					<p>
+					Using the same 80% train/20% test split we have the below scoring:
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Mean Absolute Error</th>
+									<th>Mean Squared Error</th>
+									<th>R2 Score</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Linear</td>
+									<td>4.83</td>
+									<td>44.42</td>
+									<td>-0.06</td>
+								</tr>
+								<tr>
+									<td>Ridge</td>
+									<td>4.51</td>
+									<td>37.22</td>
+									<td>0.11</td>
+								</tr>
+								<tr>
+									<td>Lasso</td>
+									<td>4.45</td>
+									<td>33.26</td>
+									<td>0.21</td>
+								</tr>
+								<tr>
+									<td>Elastic</td>
+									<td>4.42</td>
+									<td>32.62</td>
+									<td>0.22</td>
+								</tr>
+								<tr>
+									<td>Bayes</td>
+									<td>4.42</td>
+									<td>32.72</td>
+									<td>0.22</td>
+								</tr>
+								<tr>
+									<td>Support Vector</td>
+									<td>4.22</td>
+									<td>31.91</td>
+									<td>0.25</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr />
+					<p style="text-align:center;"><img src="images/age.png"></p>
 				</section>
 			</article>
+		
+		<!-- Problem 5 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Problem 5: Attractiveness Regression</h2>
+				</header>
+				<section>
+					<p>For our final problem we are using the <a href="http://www.hcii-lab.net/data/SCUT-FBP/EN/introduce.html" target="_blank">SCUT-FBP</a> dataset together with the
+					<a href=http://faculty.chicagobooth.edu/bernd.wittenbrink/cfd/index.html target="_blank">Chicago Face Database</a> from the earlier problems.
+					</p>
+					<p>
+					A novel face dataset with attractiveness ratings, namely the SCUT-FBP dataset(A dataset for facial beauty perception), is developed for automatic facial beauty perception in this work. 
+					The dataset provides a benchmark to evaluate the performance of different methods for facial attractiveness prediction. The SCUT-FBP dataset contains 500 different Asian female subjects with attractiveness ratings, 
+					all of which have been verified in terms of rating distribution, standard deviation, consistency, and self-consistency.
+					</p>
+					<p style="text-align:center;"><img src="images/SCUT.png"></p>
+					<p>Both datasets provide perceived attractiveness ratings on a scale of 1 to 5.				
+					</p>
+					<p>
+					Using the same 80% train/20% test split we have the below scoring:
+					</p>
+					<div class="table-wrapper">
+						<table class="default">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Mean Absolute Error</th>
+									<th>Mean Squared Error</th>
+									<th>R2 Score</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Linear</td>
+									<td>0.54</td>
+									<td>0.48</td>
+									<td>0.17</td>
+								</tr>
+								<tr>
+									<td>Ridge</td>
+									<td>0.53</td>
+									<td>0.46</td>
+									<td>0.20</td>
+								</tr>
+								<tr>
+									<td>Lasso</td>
+									<td>0.60</td>
+									<td>0.55</td>
+									<td>0.04</td>
+								</tr>
+								<tr>
+									<td>Elastic Net</td>
+									<td>0.57</td>
+									<td>0.50</td>
+									<td>0.12</td>
+								</tr>
+								<tr>
+									<td>Bayes</td>
+									<td>0.51</td>
+									<td>0.43</td>
+									<td>0.25</td>
+								</tr>
+								<tr>
+									<td>Support Vector</td>
+									<td>0.65</td>
+									<td>1.12</td>
+									<td>-0.54</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr />
+					<p style="text-align:center;"><img src="images/attractive.png"></p>
+				</section>
+			</article>
+	
+		<!-- Problem 5 -->	
+			<article class="container box style3">
+				<header>
+					<h2>Conclusion</h2>
+				</header>
+				<section>
+					<p>Overall I am happy with the results. Facial Ratios are effective as features for Facial Recognition and Gender Classification. They also worked well
+					for Race classification.
+					</p>
+					<p>As expected they did not perform very well with regard to both age regression and attractiveness regression. As the labels for these were subjective estimates to start with
+					we would likely need more data and more features to improve the results.
+					</p>
+				<header>
+					<h2>Next Steps</h2>
+				</header>
+					<p>The first step to improving our results would be to transform our images by adjusting for different facial poses and alignment. This would improve the calculation of ratios and
+					we would expect our model performance to improve.
+					</p>
+					<p>To further improve our models (in particular age / attractiveness regressions) we would need to incorporate new features to give us additional information.
+					</p>
+				</section>
+			</article>
+
 		-->
 
 		<section id="footer">
@@ -727,7 +1025,8 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
-		
+
+			
 			<script type="text/javascript">
 			// create the back to top button
 			$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
@@ -749,6 +1048,6 @@
 				return false;
 			});
 			</script>
-				
+						
 	</body>
 </html>
