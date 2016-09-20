@@ -194,32 +194,35 @@
 				</header>
 				<section>
 					<p>Now that we can extract the landmark coordinates we can calculate the distances between selected points.
-					<br />
-					<br />
+					</p>
+					<p>
 					Unfortunately the distances aren't very useful as they will vary simply due to different image sizes. However the
 					ratios between the distances will not change for a specific face regardless of the image size (providing the 
 					aspect ratio of the image is consistent). 
-					<br />
+					</p>
+					<p>
 					The ratios are therefore what we want to calculate.
-					<br />
-					<br />
+					</p>
+					<p>
 					Given we have 68 landmarks and we need 2 landmarks to return a distance. We can use the binomial coefficient formula to calculate
 					the number of distances available from all 68 points:
 					</p>
-					<p style="text-align:center;">
+					<p>
+					<span class="image centered">
 					<img src="https://latex.codecogs.com/gif.latex?\binom{n}{k}=\frac{n!}{k!(n-k)!}&space;\\&space;\\&space;n&space;=&space;total&space;\:&space;points&space;\\&space;k&space;=&space;points&space;\:&space;selected" 
-					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected">
+					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected"></span>
 					</p>
 					<p>Substituting n=68 and k=2 we will have 2,278 distances.
-					<br />
-					<br />
+					</p>
+					<p>
 					We need 2 distances for 1 ratio so using the binomial coefficient formula again with n=2,278 and k=2 we can calculate 2,593,503 ratios! 
-					<br />
-					<br />
+					</p>
+					<p>
 					We could use all of these ratios as our features but it's unlikely we will get that much additional info from all of them. Instead
 					we will select 21 of the 68 landmarks. This will give us 210 distances and 21,945 ratios to use as features in our models.
-					<br />
-					<span class="image fit"><img src="images/selected_points.png"></span>
+					</p>
+					<p>
+					<span class="image centered"><img src="images/selected_points.png"></span>
 					</p>
 				</section>
 			</article>	
