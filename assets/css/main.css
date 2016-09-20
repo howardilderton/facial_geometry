@@ -2002,9 +2002,9 @@
 		position: relative;
 		color: #fff;
 		text-shadow: 0 0 0.5px rgba(255, 255, 255, 0.25);
-		text-align: left;
+		text-align: center;
 		background: #35b88f url("images/banner.svg") bottom center no-repeat;
-		padding: 5em 23em 5em 23em;
+		padding: 5em 0 5em 0;
 		margin: 0;
 		background-size: 125% auto;
 	}
@@ -2015,7 +2015,6 @@
 		}
 
 		#banner header {
-			text-align: center;
 			margin: 0 0 2em 0;
 		}
 
