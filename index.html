@@ -208,7 +208,8 @@
 					</p>
 					<p style="text-align:center;">
 					<img src="https://latex.codecogs.com/gif.latex?\binom{n}{k}=\frac{n!}{k!(n-k)!}&space;\\&space;\\&space;n&space;=&space;total&space;\:&space;points&space;\\&space;k&space;=&space;points&space;\:&space;selected" 
-					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected"></p>
+					title="\binom{n}{k}=\frac{n!}{k!(n-k)!} \\ \\ n = total \: points \\ k = points \: selected">
+					</p>
 					<p>Substituting n=68 and k=2 we will have 2,278 distances.
 					<br />
 					<br />
@@ -218,7 +219,7 @@
 					We could use all of these ratios as our features but it's unlikely we will get that much additional info from all of them. Instead
 					we will select 21 of the 68 landmarks. This will give us 210 distances and 21,945 ratios to use as features in our models.
 					<br />
-						<p style="text-align:center;"><img src="images/selected_points.png"></p>
+					<span class="image fit"><img src="images/selected_points.png"></span>
 					</p>
 				</section>
 			</article>	
@@ -236,23 +237,20 @@
 					<p>PCA involves an <a href=https://en.wikipedia.org/wiki/Orthogonal_transformation target="_blank">orthogonal transformation</a> of your dimensions to emphasize variance. The goal of PCA 
 					is to reduce the number of dimensions used for modelling to a suitable number that covers the majority of the variance in the data. 
 					This is easily understood with some excellent visuals from <a href=http://setosa.io/ev/principal-component-analysis/ target="_blank">this site</a>.
-					</p>
-					
+					</p>					
 					<p>In the below 2d example we have 5 data points and 2 features (x & y). Each datapoint has both an x value and a y value which we would use in our models.
 					Using PCA we can create a transform the axis into pc1 and pc2.
 					</p>
-					<p style="text-align:center;"><img src="images/pca_2d.png"></p>
+					<span class="image fit"><img src="images/pca_2d.png"></span>					
 					<p>We haven't changed anything about the data. Both pc1 and pc2 axis are a linear combination of x & y. But as you can see from the below pc1 now gives as a lot of of information about the points
 					whilst pc2 gives very little and can be ignored. We have therefore reduced our dimensions from 2 to 1 and can use only pc1 in our model.
-					</p>
-					<p style="text-align:center;"><img src="images/pca_2d_footer.png"></p>
+					<span class="image fit"><img src="images/pca_2d_footer.png"></span>				
 					<p>Below is a similar example using 3 dimensions.
-					</p>
-					<p style="text-align:center;"><img src="images/pca_3d.gif"></p>
+					<span class="image fit"><img src="images/pca_3d.gif"></span>
 					<p>Using PCA we can reduce our 21,945 features 
 					to 150 which gives us 99.98% of the variance - and from the graph you can see that using as few as 50 features will give you over 98% of the variance.
 					</p>
-					<p style="text-align:center;"><img src="images/pca.png"></p>
+					<span class="image fit"><img src="images/pca.png"></span>
 				</section>
 			</article>	
 			
@@ -269,7 +267,7 @@
 					Other than removing images showing multiple people I did not filter or adjust any images. We therefore have images with faces that are not frontally aligned and we would expect these to perform poorly
 					in our models given no adjustments to the ratio calculations.
 					</p>
-					<p style="text-align:center;"><img src="images/photo-collage.png"></p>
+					<span class="image fit"><img src="images/photo-collage.png"></span>
 					<p>
 					Next we split our data into 80% for training and 20% for testing and fit the training data to 6 classification models.
 					We then use these models to predict the celebrities in our test data. The results are summarized below:
@@ -897,7 +895,7 @@
 						</table>
 					</div>
 					<hr />
-					<p style="text-align:center;"><img src="images/age.png"></p>
+					<span class="image fit"><img src="images/age.png"></span>
 				</section>
 			</article>
 		
@@ -972,7 +970,7 @@
 						</table>
 					</div>
 					<hr />
-					<p style="text-align:center;"><img src="images/attractive.png"></p>
+					<span class="image fit"><img src="images/attractive.png"></span>
 				</section>
 			</article>
 	
